@@ -1,4 +1,4 @@
-#include "window.h"
+ï»¿#include "window.h"
 
 namespace Michael
 {
@@ -7,29 +7,29 @@ namespace Michael
         m_width = width;
         m_height = height;
 
-        // ³õÊ¼»¯SDLÊÓÆµ×ÓÏµÍ³
-        if (SDL_Init(SDL_INIT_VIDEO) != 0)
-        {
-            throw std::runtime_error("SDL³õÊ¼»¯Ê§°Ü: " + std::string(SDL_GetError()));
-        }
-
-        // ÉèÖÃSDLÈÕÖ¾ÓÅÏÈ¼¶ÎªVERBOSE£¨ÏêÏ¸Ä£Ê½£©£¬»áÊä³ö¸ü¶àµ÷ÊÔÐÅÏ¢
-        // SDL_LOG_PRIORITY_VERBOSEÊÇ×îµÍÓÅÏÈ¼¶£¨×îÏêÏ¸£©£¬ÆäËû¼¶±ðÈçDEBUG/INFO/WARNING/ERROR/CRITICAL
+        // è®¾ç½®SDLæ—¥å¿—ä¼˜å…ˆçº§ä¸ºVERBOSEï¼ˆè¯¦ç»†æ¨¡å¼ï¼‰ï¼Œä¼šè¾“å‡ºæ›´å¤šè°ƒè¯•ä¿¡æ¯
+        // SDL_LOG_PRIORITY_VERBOSEæ˜¯æœ€ä½Žä¼˜å…ˆçº§ï¼ˆæœ€è¯¦ç»†ï¼‰ï¼Œå…¶ä»–çº§åˆ«å¦‚DEBUG/INFO/WARNING/ERROR/CRITICAL
         SDL_SetLogPriorities(SDL_LOG_PRIORITY_VERBOSE);
 
-        // SDL_WINDOW_RESIZABLE£º´°¿Ú¿Éµ÷Õû´óÐ¡£¨¿ÉÑ¡±êÖ¾£©
+        // SDL_WINDOW_RESIZABLEï¼šçª—å£å¯è°ƒæ•´å¤§å°ï¼ˆå¯é€‰æ ‡å¿—ï¼‰
         m_window = SDL_CreateWindow("Bona", m_width, m_height, SDL_WINDOW_RESIZABLE);
 
-        // ¼ì²é´°¿ÚÊÇ·ñ´´½¨³É¹¦£¨Ö¸Õë·Ç¿Õ±íÊ¾³É¹¦£©
+        // æ£€æŸ¥çª—å£æ˜¯å¦åˆ›å»ºæˆåŠŸï¼ˆæŒ‡é’ˆéžç©ºè¡¨ç¤ºæˆåŠŸï¼‰
         if (!m_window)
         {
             SDL_Log("Could not create a window: %s", SDL_GetError());
             SDL_Quit();
         }
 
-        // ½«´°¿Ú¾ÓÖÐÏÔÊ¾ÔÚÆÁÄ»ÉÏ
-        // SDL_WINDOWPOS_CENTERED£ºÌØÊâÖµ£¬±íÊ¾×Ô¶¯¼ÆËãµ½ÆÁÄ»ÖÐÐÄµÄÎ»ÖÃ
+        // å°†çª—å£å±…ä¸­æ˜¾ç¤ºåœ¨å±å¹•ä¸Š
+        // SDL_WINDOWPOS_CENTEREDï¼šç‰¹æ®Šå€¼ï¼Œè¡¨ç¤ºè‡ªåŠ¨è®¡ç®—åˆ°å±å¹•ä¸­å¿ƒçš„ä½ç½®
         SDL_SetWindowPosition(m_window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+
+        m_renderer = SDL_CreateRenderer(m_window, nullptr);
+        if (!m_renderer)
+        {
+            SDL_Log("Create renderer failed: %s", SDL_GetError());
+        }
     }
 
     Window::~Window()
@@ -38,15 +38,15 @@ namespace Michael
         SDL_Quit();
     }
 
-    bool Window::shouldClose()
+    bool Window::should_close()
     {
         return m_run;
     }
 
-    void Window::pollEvents()
+    void Window::poll_events()
     {
-        // ×èÈûµÈ´ýÊÂ¼þ£¨»á¹ÒÆðÏß³ÌÖ±µ½ÓÐÊÂ¼þµ½´ï£¬½ÚÊ¡CPU×ÊÔ´£©
-        // ¶Ô±ÈSDL_PollEvent£¨·Ç×èÈû£¬Á¢¼´·µ»Ø£¬ÎÞÊÂ¼þÊ±·µ»Øfalse£©
+        // é˜»å¡žç­‰å¾…äº‹ä»¶ï¼ˆä¼šæŒ‚èµ·çº¿ç¨‹ç›´åˆ°æœ‰äº‹ä»¶åˆ°è¾¾ï¼ŒèŠ‚çœCPUèµ„æºï¼‰
+        // å¯¹æ¯”SDL_PollEventï¼ˆéžé˜»å¡žï¼Œç«‹å³è¿”å›žï¼Œæ— äº‹ä»¶æ—¶è¿”å›žfalseï¼‰
         SDL_WaitEvent(&m_event);
 
         switch (m_event.type)

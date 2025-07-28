@@ -1,26 +1,31 @@
 ﻿#pragma once
 
-//#include "color.h"
+#include <SDL3/SDL.h>
+#include "window.h"
+#include "../pipeline/render_resource.h"
 
 namespace Michael
 {
     class FrameBuffer
     {
     public:
-        FrameBuffer(int width, int height);
+        using Ptr = std::shared_ptr<FrameBuffer>;
+        static Ptr create(const int& width, const int& height, const Window::Ptr& window, const RenderResource::Ptr& resource)
+        {
+            return std::make_shared<FrameBuffer>(width, height, window, resource);
+        }
+
+        FrameBuffer(const int& width, const int& height, const Window::Ptr& window, const RenderResource::Ptr& resource);
         ~FrameBuffer();
 
-        int width, height;
-        unsigned char* color_buffer;
-        float* depth_buffer;
+        void update_frame_buffer();
 
-        void set_depth(int x, int y, float depth);
-        float get_depth(int x, int y);
-        //void set_color(int x, int y, Color color);
-        //Color get_color(int x, int y);
+        [[nodiscard]] auto getTexture() const { return m_texture; }
 
-        void renderbuffer_release();
-        //void renderbuffer_clear_color(Color color);
-        void renderbuffer_clear_depth(float depth);
+    public:
+        int                 tex_width { 0 };
+        int                 tex_height{ 0 };
+        SDL_Texture*        m_texture         = nullptr;
+        RenderResource::Ptr m_render_resource = nullptr;
     };
 }

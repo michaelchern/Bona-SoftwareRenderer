@@ -20,13 +20,12 @@ namespace Michael
 
         ~Window();
 
-        bool shouldClose();
+        bool should_close();
 
-        void pollEvents();
-
-        void Present();
+        void poll_events();
 
         [[nodiscard]] auto getWindow() const { return m_window; }
+        [[nodiscard]] auto getRenderer() const { return m_renderer; }
 
     private:
         int           m_width{ 0 };
@@ -34,6 +33,6 @@ namespace Michael
         bool          m_run = true;
         SDL_Event     m_event{};
         SDL_Renderer* m_renderer = nullptr;
-		SDL_Window*   m_window   = nullptr;
+        SDL_Window*   m_window   = nullptr;
     };
 }

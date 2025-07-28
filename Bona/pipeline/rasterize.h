@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include <memory>
+#include "render_resource.h"
+#include "input_assembler.h"
 
 namespace Michael
 {
@@ -8,16 +10,21 @@ namespace Michael
     {
     public:
         using Ptr = std::shared_ptr<Rasterize>;
-        static Ptr create()
+        static Ptr create(const InputAssembler::Ptr& input, const RenderResource::Ptr& resource)
         {
-            return std::make_shared<Rasterize>();
+            return std::make_shared<Rasterize>(input, resource);
         }
 
-        Rasterize();
+        Rasterize(const InputAssembler::Ptr& input, const RenderResource::Ptr& resource);
         ~Rasterize();
-        void line(int ax, int ay, int bx, int by, TGAImage& framebuffer, TGAColor color);
-    private:
-        
+
+        std::tuple<int, int> project(vec3 v);
+
+        void draw_line(int ax, int ay, int bx, int by, TGAColor color);
+
+    public:
+        RenderResource::Ptr m_render_resource = nullptr;
+        InputAssembler::Ptr m_input_assembler = nullptr;
     };
     
-} 
+}
