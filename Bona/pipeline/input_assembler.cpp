@@ -117,4 +117,4 @@ namespace Michael
     {
         return norms[facet_nrm[iface * 3 + nthvert]];
     }
-} 
+}

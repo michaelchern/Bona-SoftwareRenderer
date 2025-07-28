@@ -20,11 +20,11 @@ namespace Michael
 
         std::tuple<int, int> project(vec3 v);
 
-        void draw_line(int ax, int ay, int bx, int by, TGAColor color);
+        void draw_line(int ax, int ay, int bx, int by, Color color);
 
     public:
-        RenderResource::Ptr m_render_resource = nullptr;
         InputAssembler::Ptr m_input_assembler = nullptr;
+        RenderResource::Ptr m_render_resource = nullptr;
     };
     
 }

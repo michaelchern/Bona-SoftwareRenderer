@@ -13,7 +13,7 @@ namespace Michael
         Color(uint8_t R, uint8_t G, uint8_t B, uint8_t A = 255);
         Color(const TGAColor& tga_color);
 
-        /*static float MAX_CHANNEL_VALUE;
+        static uint8_t MAX_CHANNEL_VALUE;
         static Color White;
         static Color Red;
         static Color Green;
@@ -28,6 +28,6 @@ namespace Michael
 
         Color operator*(float intensity) const;
 
-        Color operator*(const Color& color) const;*/
+        Color operator*(const Color& color) const;
     };
 }

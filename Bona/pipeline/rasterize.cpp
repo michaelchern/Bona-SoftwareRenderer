@@ -7,24 +7,18 @@ namespace Michael
         m_render_resource = resource;
 		m_input_assembler = input;
 
-        //TGAColor red = { 255,   0, 0, 255 };
-        //draw_line(0, 0, 0, 0, red);
-        //draw_line(56, 56, 56, 56, red);
+        for (int i = 0; i < m_input_assembler->nfaces(); i++)
+        {
+            auto [ax, ay] = project(m_input_assembler->vert(i, 0));
+            auto [bx, by] = project(m_input_assembler->vert(i, 1));
+            auto [cx, cy] = project(m_input_assembler->vert(i, 2));
 
-        //for (int i = 0; i < m_input_assembler->nfaces(); i++)
-        //{
-        //    auto [ax, ay] = project(m_input_assembler->vert(i, 0));
-        //    auto [bx, by] = project(m_input_assembler->vert(i, 1));
-        //    auto [cx, cy] = project(m_input_assembler->vert(i, 2));
+            draw_line(ax, ay, bx, by, Color::Red);
+            draw_line(bx, by, cx, cy, Color::Red);
+            draw_line(cx, cy, ax, ay, Color::Red);
+        }
 
-        //    TGAColor red = {255,   0, 0, 255 };
-
-        //    //draw_line(ax, ay, bx, by, red);
-        //    //draw_line(bx, by, cx, cy, red);
-        //    //draw_line(cx, cy, ax, ay, red);
-        //    
-
-        //}
+        m_render_resource->color_buffer_flip_vertically();
     }
 
     std::tuple<int, int> Rasterize::project(vec3 v) { // First of all, (x,y) is an orthogonal projection of the vector (x,y,z).
@@ -37,9 +31,9 @@ namespace Michael
         m_render_resource.reset();
 	}
 
-    void Rasterize::draw_line(int ax, int ay, int bx, int by, TGAColor color)
+    void Rasterize::draw_line(int ax, int ay, int bx, int by, Color color)
     {
-        /*bool steep = std::abs(ax - bx) < std::abs(ay - by);
+        bool steep = std::abs(ax - bx) < std::abs(ay - by);
         if (steep)
         {
             std::swap(ax, ay);
@@ -71,6 +65,6 @@ namespace Michael
                 y += by > ay ? 1 : -1;
                 ierror -= 2 * (bx - ax);
             }
-        }*/
+        }
     }
 }

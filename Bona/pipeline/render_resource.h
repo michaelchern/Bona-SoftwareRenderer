@@ -18,8 +18,9 @@ namespace Michael
         RenderResource(const int& width, const int& height);
         ~RenderResource();
 
-        //void set_color_buffer(int x, int y, const Color& c);
-        //void clear_color_buffer(Color color);
+        void set_color_buffer(int x, int y, const Color& c);
+        void clear_color_buffer(Color color);
+        void color_buffer_flip_vertically();
         
     public:
         int tex_width, tex_height;
