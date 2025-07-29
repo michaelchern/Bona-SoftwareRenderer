@@ -28,7 +28,7 @@ namespace Michael
         [[nodiscard]] auto getRenderer() const { return m_renderer; }
 
     private:
-        int           m_width{ 0 };
+        int           m_width { 0 };
         int           m_height{ 0 };
         bool          m_run = true;
         SDL_Event     m_event{};

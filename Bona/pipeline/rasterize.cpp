@@ -13,9 +13,12 @@ namespace Michael
             auto [bx, by] = project(m_input_assembler->vert(i, 1));
             auto [cx, cy] = project(m_input_assembler->vert(i, 2));
 
-            draw_line(ax, ay, bx, by, Color::Red);
-            draw_line(bx, by, cx, cy, Color::Red);
-            draw_line(cx, cy, ax, ay, Color::Red);
+            //draw_line(ax, ay, bx, by, Color::Red);
+            //draw_line(bx, by, cx, cy, Color::Red);
+            //draw_line(cx, cy, ax, ay, Color::Red);
+            Color rnd;
+            for (int c = 0; c < 3; c++) rnd[c] = std::rand() % 255;
+			rasterize_triangle(ax, ay, bx, by, cx, cy, rnd);
         }
 
         m_render_resource->color_buffer_flip_vertically();
@@ -66,5 +69,32 @@ namespace Michael
                 ierror -= 2 * (bx - ax);
             }
         }
+    }
+
+    void Rasterize::rasterize_triangle(int ax, int ay, int bx, int by, int cx, int cy, Color color)
+    {
+        int bbminx = std::min(std::min(ax, bx), cx); // bounding box for the triangle
+        int bbminy = std::min(std::min(ay, by), cy); // defined by its top left and bottom right corners
+        int bbmaxx = std::max(std::max(ax, bx), cx);
+        int bbmaxy = std::max(std::max(ay, by), cy);
+        double total_area = signed_triangle_area(ax, ay, bx, by, cx, cy);
+        if (total_area < 1) return; // backface culling + discarding triangles that cover less than a pixel
+
+#pragma omp parallel for
+        for (int x = bbminx; x <= bbmaxx; x++)
+        {
+            for (int y = bbminy; y <= bbmaxy; y++)
+            {
+                double alpha = signed_triangle_area(x, y, bx, by, cx, cy) / total_area;
+                double beta = signed_triangle_area(x, y, cx, cy, ax, ay) / total_area;
+                double gamma = signed_triangle_area(x, y, ax, ay, bx, by) / total_area;
+                if (alpha < 0 || beta < 0 || gamma < 0) continue; // negative barycentric coordinate => the pixel is outside the triangle
+                m_render_resource->set_color_buffer(x, y, color);
+            }
+        }
+    }
+
+    double Rasterize::signed_triangle_area(int ax, int ay, int bx, int by, int cx, int cy) {
+        return .5 * ((by - ay) * (bx + ax) + (cy - by) * (cx + bx) + (ay - cy) * (ax + cx));
     }
 }

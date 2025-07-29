@@ -11,13 +11,15 @@ namespace Michael
     class Application
     {
     public:
-        Application() = default;
+        Application()  = default;
         ~Application() = default;
 
         void run();
 
     private:
         void init();
+        void load_data();
+        void set_render_state();
         void main_loop();
         void render();
         void clean_up();
@@ -28,8 +30,8 @@ namespace Michael
 
         Window::Ptr         m_window          { nullptr };
         InputAssembler::Ptr m_input_assembler { nullptr };
-        FrameBuffer::Ptr    m_frame_buffer    { nullptr };
         RenderResource::Ptr m_render_resource { nullptr };
+        FrameBuffer::Ptr    m_frame_buffer    { nullptr };
         Rasterize::Ptr      m_rasterize       { nullptr };
     };
 }

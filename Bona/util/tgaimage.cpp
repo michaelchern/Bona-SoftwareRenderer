@@ -43,7 +43,8 @@ bool TGAImage::read_tga_file(const std::string filename)
         }
     } else if (10==header.datatypecode||11==header.datatypecode)
     {
-        if (!load_rle_data(in)) {
+        if (!load_rle_data(in))
+        {
             std::cerr << "an error occured while reading the data\n";
             return false;
         }

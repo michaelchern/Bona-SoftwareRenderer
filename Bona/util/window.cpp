@@ -68,6 +68,6 @@ namespace Michael
             }
         }
 
-        SDL_Log("Event: %d", m_event.type);
+        //SDL_Log("Event: %d", m_event.type);
     }
 }
